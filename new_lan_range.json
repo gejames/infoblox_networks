@@ -1,6 +1,6 @@
 {
-     "start_addr": "10.0.6.129",
-     "end_addr": "10.0.6.254",
+     "start_addr": "10.0.7.129",
+     "end_addr": "10.0.7.254",
      "server_association_type": "MEMBER" ,
      "member": 
         {

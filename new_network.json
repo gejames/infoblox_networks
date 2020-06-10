@@ -1,5 +1,5 @@
 {
-    "network": "10.0.6.0/24",
+    "network": "10.0.7.0/24",
     "members": [
        {
           "_struct": "dhcpmember",
