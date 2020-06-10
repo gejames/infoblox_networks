@@ -1,0 +1,100 @@
+- hosts: nios
+  connection: local
+
+  vars:
+    cidr: 24
+    parent_container: 10.0.0.0/16
+    start_dhcp_range: 129
+    end_dhcp_range: 254
+
+  
+  tasks:
+        
+    - name: RETURN NEXT AVAILABLE NETWORK
+      set_fact:
+        networkaddr: "{{ lookup('nios_next_network', parent_container, cidr=cidr, provider=nios_provider) }}"
+     
+         
+    - name: CREATE JSON FILE FOR NEW NETWORK
+      template:
+        src: templates/new_network.j2
+        dest: new_network.json
+      
+    - name: CREATE NETWORK OBJECT AND ASSIGN GRID MEMBER
+      uri:
+        url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/network
+        method: POST
+        user: "{{ nios_provider.username }}" 
+        password: "{{ nios_provider.password }}"
+        body: "{{ lookup('file','new_network.json') }}"
+        body_format: json
+        status_code: 201
+        validate_certs: false
+ 
+    - name: CREATE JSON FILE FOR NEW DCHP RANGE
+      template:
+        src: templates/new_lan_range.j2
+        dest: new_lan_range.json
+
+    - name: CREATE DHCP RANGE FOR NEW NETWORK
+      uri:
+        url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/range
+        method: POST
+        user: "{{ nios_provider.username }}" 
+        password: "{{ nios_provider.password }}"
+        body: "{{ lookup('file','new_lan_range.json') }}"
+        body_format: json
+        status_code: 201
+        validate_certs: false
+     
+    - name: UPDATE NEW NETWORK
+      nios_network:
+        network: "{{ item }}"
+        comment: Added from Ansible
+        options:
+          - name: domain-name
+            value: example.com
+          - name: routers
+            value: "{{ item | ipaddr('1') | ipaddr('address') }}"
+        state: present
+        provider: "{{ nios_provider }}"
+      loop: "{{ networkaddr }}"
+
+#  
+
+    - name: RESTART DHCP SERVICE
+      uri:
+        url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/grid/b25lLmNsdXN0ZXIkMA:Infoblox?_function=restartservices
+        method: POST
+        user: "{{ nios_provider.username }}" 
+        password: "{{ nios_provider.password }}"
+        body: "{{ lookup('file','restart_dhcp_service.json') }}"
+        body_format: json
+        status_code: 200
+        validate_certs: false
+
+   #
+   #  SAMPLE CODE
+   #
+   # - name: return the next 3 available IP addresses
+   #   set_fact:
+   #     ipaddr: "{{ lookup('nios_next_ip', '10.0.0.0/24', num=3,  exclude=['10.0.0.1'], provider=nios_provider) }}"
+
+    # - name: ENSURE NETWORK CONTAINER IS PRESENT
+    #   nios_network:
+    #     container: true
+    #     network: 10.0.0.0/16
+    #     comment: sets the IPv4 network
+    #     options:
+    #       - name: domain-name
+    #         value: ansible.com
+    #     state: present
+    #     provider: "{{nios_provider}}"
+
+   
+
+    
+
+
+
+    
