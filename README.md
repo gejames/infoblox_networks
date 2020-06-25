@@ -12,7 +12,7 @@ This tutorial is meant as an introduction to how one can manage IPs with Ansible
 
 First, install infoblox-client on your Ansible Tower server. This will install the python libraries necessary for Ansible to communicate with InfoBlox.
 
-```
+```bash
 $ sudo pip install infoblox-client
 ```
 
@@ -21,7 +21,7 @@ Next, we need to create credentials so Tower can connect to InfoBlox.  For simpl
 We will create a few files for this lab, so I will use the standard of putting the file name to be created before the code as follows:
 
 
-```
+```yaml
 group_vars/nios.yml
 
 ---
@@ -52,7 +52,7 @@ nios_add_ipv4_network.yml
 
 The first thing we need to do is query InfoBlox for the next available subnet within our parent container.  Add the following lines to your playbook.  This will return the next available /24 (our cidr variable above) in the format 10.0.12.0/24 and assign it to networkaddr.
 
-```
+```yaml
 tasks:
         
     - name: RETURN NEXT AVAILABLE NETWORK
@@ -64,7 +64,7 @@ You can create the network with the nios_network module, but at this time the mo
 
 We will use a jinja2 template to create the json file necessary to affect our change.
 
-```
+```jinja2
 templates/net_network.j2
 
 {
