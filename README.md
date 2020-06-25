@@ -33,7 +33,7 @@ nios_provider:
 
 To start our playbook, we'll assign some default values for testing.  These can be overridden later in Tower with a Survey. Create a new file called nios_add_ipv4_network.yml. 
 
-```
+```yaml
 nios_add_ipv4_network.yml
 
 
@@ -216,14 +216,9 @@ Create a job template for our new playbook.
 
 ![JobTemplate](docs/jobtemplate1.png)
 
-Add a survey so the user can pick where they need the new subnet created.  A feature enhancement to the playbook would be to add in logic to restrict where subnets can be created based on state, region, or other criteria.   
+Add a survey so the user can pick where they need the new subnet created and customize the extensible attributes. A feature enhancement to the playbook would be to add logic that restricts where subnets can be created based on state, region, or other criteria.   
 
 ![Survey](docs/survey1.png)
-
-
-
-
-
 
 
 
