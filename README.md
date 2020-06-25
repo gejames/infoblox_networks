@@ -80,7 +80,7 @@ templates/net_network.j2
 
 The output from our template will create a json file that will look like this
 
-```
+```jinja2
 {
     "network": "10.0.12.0/24",
     "members": [
@@ -96,7 +96,7 @@ The output from our template will create a json file that will look like this
 
 Add the following to your playbook to create the network.
 
-```
+```yaml
 - name: CREATE JSON FILE FOR NEW NETWORK
       template:
         src: templates/new_network.j2
@@ -118,7 +118,7 @@ Now that we have a network created, let's create a DHCP range.  We can use the I
 
 First, create the template file.
 
-```
+```jinja2
 templates/new_lan_range.j2
 
 {
@@ -136,7 +136,7 @@ templates/new_lan_range.j2
 
 Our json file output will look like the following.
 
-```
+```jinja2
 {
      "start_addr": "10.0.12.100",
      "end_addr": "10.0.12.254",
@@ -152,7 +152,7 @@ Our json file output will look like the following.
 
 Then add the following to your playbook.
 
-```
+```yaml
 - name: CREATE JSON FILE FOR NEW DCHP RANGE
       template:
         src: templates/new_lan_range.j2
@@ -172,7 +172,7 @@ Then add the following to your playbook.
 
 Now that we have our new network created and have assigned a DHCP range, we can add in some details with then nios_network module. Here is where you can DHCP options and update your extensible attributes.  
 
-```
+```yaml
 - name: UPDATE NEW NETWORK
       nios_network:
         network: "{{ item }}"
@@ -194,7 +194,7 @@ Now that we have our new network created and have assigned a DHCP range, we can 
 We should tell InfoBlox to restart the DHCP service since there was a change.  The section grid/b25lLmNsdXN0ZXIkMA may differ for your installation.  Please refer to the InfoBlox documentation on how to determine this value.
 
 
-```
+```yaml
  - name: RESTART DHCP SERVICE
       uri:
         url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/grid/b25lLmNsdXN0ZXIkMA:Infoblox?_function=restartservices
