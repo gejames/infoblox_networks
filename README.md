@@ -34,7 +34,9 @@ nios_provider:
 ```
 ## Adding an ipv4 network
 
-To start our playbook, we'll assign some default values for testing.  These can be overridden later in Tower with a Survey. Create a new file called nios_add_ipv4_network.yml. 
+To start our playbook, we'll assign some default values for testing.  These can be overridden later in Tower with a Survey. 
+
+> Create a new file called **nios_add_ipv4_network.yml** 
 
 ```yaml
 nios_add_ipv4_network.yml
@@ -52,7 +54,7 @@ nios_add_ipv4_network.yml
     country: USA
     state: CA
 ```
-
+***
 The first thing we need to do is query InfoBlox for the next available subnet within our parent container.  Add the following lines to your playbook.  This will return the next available /24 (our cidr variable above) in the format 10.0.12.0/24 and assign it to the networkaddr variable..
 
 ```yaml
@@ -62,10 +64,10 @@ tasks:
       set_fact:
         networkaddr: "{{ lookup('nios_next_network', parent_container, cidr=cidr, provider=nios_provider) }}"
 ```
-
+***
 You can create the network with the nios_network module, but at this time the module does not support assigning the network to a grid member.  For that, we need to use the InfoBlox API and use the ansible uri module to make the change.
 
-We will use a jinja2 template to create the json file necessary for our change.
+> We will use a jinja2 template to create the json file necessary for our change.
 
 ```jinja2
 templates/net_network.j2
@@ -95,6 +97,8 @@ The output from our template will create a json file that will look like this
  }
  ```
 
+***
+
 Add the following to your playbook to create the network.
 
 ```yaml
@@ -114,10 +118,10 @@ Add the following to your playbook to create the network.
       status_code: 201
       validate_certs: false
 ```
-
+***
 Now that we have a network created, let's create a DHCP range.  We can use the InfoBlox API for this task as well.
 
-First, create the template file.
+> First, create the template file.
 
 ```jinja2
 templates/new_lan_range.j2
@@ -150,7 +154,7 @@ Our json file will look like the following.
      
   }
 ```
-
+***
 Then add the following to your playbook.
 
 ```yaml
@@ -170,7 +174,7 @@ Then add the following to your playbook.
       status_code: 201
       validate_certs: false
 ```
-
+***
 Now that we have our new network created and have assigned a DHCP range, we can add in some details with then nios_network module. Here is where you can configure DHCP options and update your extensible attributes.  
 
 ```yaml
@@ -191,7 +195,7 @@ Now that we have our new network created and have assigned a DHCP range, we can 
     provider: "{{ nios_provider }}"
   loop: "{{ networkaddr }}"
 ```
-
+***
 We should tell InfoBlox to restart the DHCP service since there was a change.  The section grid/b25lLmNsdXN0ZXIkMA may differ for your installation.  Please refer to the InfoBlox documentation on how to determine this value.
 
 
@@ -207,7 +211,7 @@ We should tell InfoBlox to restart the DHCP service since there was a change.  T
         status_code: 200
         validate_certs: false
 ```
-
+***
 Once the file is complete, you can push it to your source code repository.
 
 In Ansible Tower we will create a Job Template and Survey so anyone can create a new network in InfoBlox.
@@ -217,14 +221,17 @@ In Ansible Tower, create a new inventory with your InfoBlox server as the host a
 You will also need to create new Project that points to your source control.
 
 
-Create a job template for your new playbook. If you encrypted your nios.yml file with ansible-vault, you will have to provide your Vault credentials here.
+Create a job template for your new playbook. If you encrypted your **nios.yml** file with ansible-vault, you will have to provide your Vault credentials here.
 
 ![JobTemplate](docs/jobtemplate1.png)
+
+***
 
 Add a survey so the user can choose where they need the new subnet created and customize any extensible attributes. A feature enhancement to the playbook would be to add logic that restricts where subnets can be created based on state, region, or other criteria.  An example survey is below.
 
 ![Survey](docs/survey1.png)
 
+***
 
 Before we launch or Job Template, let's take a look at InfoBlox and see what existing networks we have.
 
@@ -232,16 +239,28 @@ You can see that 10.0.12.0/24 is the next available network.
 
 ![InfoBlox](docs/infoblox1.png)
 
+***
 
- Back in Ansible Tower, set the verbosity of your Job to 1 and launch your job.
+ Back in Ansible Tower, set the verbosity of your Job to 1 and launch.
 
 ![Launch](docs/launch1.png)
 
+*** 
 You can see the next available network in the output
 
 ![Launch](docs/jobtemplate2.png)
 
+***
 
+In InfoBlox, examine the network and verify the changes have been made.
+
+![InfoBlox](docs/infoblox3.png)
+
+***
+
+## Next Steps
+
+From here, you should be able to add additional tasks that create hosts records or update existing networks. Try to write a playbook that updates the extensible network of an existing network and tests to make sure it is an valid parent container.
 
 
 
