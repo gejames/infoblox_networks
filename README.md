@@ -273,7 +273,9 @@ In InfoBlox, examine the network and verify the changes have been made.
 
 ## Next Steps
 
-From here, you should be able to add additional tasks that can create host records or update existing networks. Try to write a playbook that updates the extensible attributes of an existing network.  Add tests to make sure the parent container is valid based on some criteria, such as state or region.
+From here, you should be able to add additional tasks that can create host records or update existing networks. Add tests to make sure the parent container is valid based on some criteria, such as state or region. Try to write a playbook that updates the extensible attributes of an existing network.  
+
+Any automation journey should start with small wins. Automate a few small tasks today and tomorrow you can have a fully automated IPAM solution.
 
 
 
