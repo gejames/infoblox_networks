@@ -1,26 +1,27 @@
 #  Automating IPAM with Ansible
 
-One of the more error-prone and mundane tasks a system administrator is tasked with is IP Administration. Care needs to be taken that IP addresses are assigned accurately and promptly. As complexity grows, it becomes increasingly difficult for administrators to keep track of IP changes by hand.  This inevitably leads to a centralized tool, such as InfoBlox, being used to track IP assignments.  While this alleviates some of the complexity, there is still room for human error.  IP addresses may not be retired properly.  Inexperienced admins might assign IPs from an incorrect subnet.  A device may be moved without letting network administrators know about the change. As the source of truth drifts from reality, the chance of an outage or other system failure increases. 
+One of the more error-prone and mundane tasks a system administrator is tasked with is IP Administration. Care needs to be taken that IP addresses are assigned accurately and promptly. As complexity grows, it becomes increasingly difficult for administrators to keep track of IP changes by hand.  This inevitably leads to a centralized tool, such as InfoBlox, being used to track IP assignments.  While this alleviates some of the complexity, there is still room for human error.  IP addresses might not be retired properly.  Inexperienced admins may assign IPs from an incorrect subnet.  A device can be moved without letting network administrators know about the change. As the source of truth drifts from reality, the chance of an outage or other system failure increases. 
 
 Not only this, but the complexities of a particular environment takes time to learn.  Does the new branch office in Boise get an IP subnet from the mid-west region, or is it part of the Pacific Northwest?   What IP should be assigned to the new firewall in the Seattle Datacenter?  How many exceptions to the rules do we allow before no one can understand the system as a whole?
 
 With Ansible and InfoBlox, we can automate these decisions and take some of the guesswork out the process.  We can use Ansible Tower to create Surveys that will allow anyone with a passing knowledge of IP addresses to request, assign, and manage the IPs they need to complete their work.  This frees up time for system admins to work on bigger projects and reduces the chance of human error.  
 
-This tutorial is meant as an introduction to how one can manage IPs with Ansible and InfoBlox, and thus overcome some of the problems inherent in manual IP assignment.  You should have access to InfoBlox and Ansible Tower, preferably in a lab environment.   I will walk you through setting up the Ansible control host to connect to InfoBlox, creating credentials, and assigning a new subnet from a pre-defined pool of available IPs.   We will also create a DHCP range and show how you can assign extensible attributes automatically.
+This tutorial is meant as an introduction to how one can manage IPs with Ansible and InfoBlox, and thus overcome some of the problems inherent in manual IP assignment.  You should have access to InfoBlox and Ansible Tower, preferably in a lab environment.   We will walk you through setting up the Ansible control host to connect to InfoBlox, creating credentials, and assigning a new subnet from a pre-defined pool of available IPs.   We will also create a DHCP range and show how you can assign extensible attributes automatically.  As a use case example, we will create a Survey in Ansible Tower that will anyone to assign a new subnet.
 
 ## Reqirements
 
 You should already be familiar with creating assests in Ansible Tower and have knowledge of how InfoBlox IPAM works.  
 
-First, install infoblox-client on your Ansible Tower server. This will install the python libraries necessary for Ansible to communicate with InfoBlox.
+First, install the infoblox-client on your Ansible Tower server. This will install the python libraries necessary for Ansible to communicate with InfoBlox.
 
 ```bash
 $ sudo pip install infoblox-client
 ```
 
-Next, we need to create credentials so Andinle Tower can connect to InfoBlox.  For simplicity, I have put my credentials in a group_vars/nios.yml file.   I would also recommend encrypting this file with ansible-vault.  In a production environment, you would probably want to create a custom credential for InfoBlox within Ansible Tower.
+Next, we need to create credentials so Andinle Tower can connect to InfoBlox.  For simplicity, I have put my credentials in a group_vars/nios.yml file.  I would also recommend encrypting this file with ansible-vault.  In a production environment, you would probably want to create a custom credential for InfoBlox within Ansible Tower.
 
 We will create a few files for this lab, so I will use the standard of putting the file name to be created before the code as follows:
+
 
 
 ```yaml
@@ -41,7 +42,7 @@ To start our playbook, we'll assign some default values for testing.  These can 
 ```yaml
 nios_add_ipv4_network.yml
 
-
+---
 - hosts: nios
   connection: local
 
@@ -65,7 +66,7 @@ tasks:
         networkaddr: "{{ lookup('nios_next_network', parent_container, cidr=cidr, provider=nios_provider) }}"
 ```
 ***
-You can create the network with the nios_network module, but at this time the module does not support assigning the network to a grid member.  For that, we need to use the InfoBlox API and use the ansible uri module to make the change.
+You can create the network with the nios_network module, but at this time the module does not support assigning the network to a grid member.  For that, we need to use the InfoBlox API and the Ansible uri module to make the change.
 
 > We will use a jinja2 template to create the json file necessary for our change.
 
@@ -82,6 +83,8 @@ templates/net_network.j2
     ]
  }
 ```
+
+
 
 The output from our template will create a json file that will look like this
 
