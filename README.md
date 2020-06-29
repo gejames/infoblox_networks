@@ -56,7 +56,7 @@ nios_add_ipv4_network.yml
     state: CA
 ```
 ***
-The first thing we need to do is query InfoBlox for the next available subnet within our parent container.  Add the following lines to your playbook.  This will return the next available /24 (our cidr variable above) in the format 10.0.12.0/24 and assign it to the networkaddr variable..
+The first thing we need to do is query InfoBlox for the next available subnet within our parent container.  Add the following lines to your playbook.  This will return the next available /24 (our cidr variable above) in the format 10.0.12.0/24 and assign it to the networkaddr variable.
 
 ```yaml
 tasks:
