@@ -266,6 +266,15 @@ In InfoBlox, examine the network and verify the changes have been made.
 From here, you should be able to add additional tasks that can create host records or update existing networks. Try to write a playbook that updates the extensible attributes of an existing network and tests to make sure it is a valid parent container.
 
 
+## References
+
+[Github Repo ](https://github.com/gejames/infoblox_networks)
+
+[InfoBlox API Documentaion](https://www.infoblox.com/wp-content/uploads/infoblox-deployment-infoblox-rest-api.pdf)
+
+[Ansible InfoBlox Guide](https://docs.ansible.com/ansible/latest/scenario_guides/guide_infoblox.html)
+
+[Ansible NIOS Modules](https://docs.ansible.com/ansible/latest/modules/list_of_net_tools_modules.html#nios)
 
 
 
