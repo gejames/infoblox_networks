@@ -1,4 +1,4 @@
-#  Automating IPAM with Ansible
+#  Automating IPAM with Ansible and InfoBlox
 
 One of the more error-prone and mundane tasks a system administrator is tasked with is IP Administration. Care needs to be taken that IP addresses are assigned accurately and promptly. As complexity grows, it becomes increasingly difficult for administrators to keep track of IP changes by hand.  This inevitably leads to a centralized tool, such as InfoBlox, being used to track IP assignments.  While this alleviates some of the complexity, there is still room for human error.  IP addresses might not be retired properly.  Inexperienced admins may assign IPs from an incorrect subnet.  A device can be moved without letting network administrators know about the change. As the source of truth drifts from reality, the chance of an outage or other system failure increases. 
 
@@ -90,22 +90,6 @@ templates/net_network.j2
  }
 ```
 
-The output from our template will create a json file that will look like this
-
-```jinja2
-{
-    "network": "10.0.12.0/24",
-    "members": [
-       {
-          "_struct": "dhcpmember",
-          "ipv4addr" : "192.168.1.20"
-       }
-    ]
- }
- ```
-
-***
-
 Add the following to your playbook to create the network.
 
 ```yaml
@@ -125,6 +109,21 @@ Add the following to your playbook to create the network.
       status_code: 201
       validate_certs: false
 ```
+
+The output from our template will create a json file that will look like this
+
+```jinja2
+{
+    "network": "10.0.12.0/24",
+    "members": [
+       {
+          "_struct": "dhcpmember",
+          "ipv4addr" : "192.168.1.20"
+       }
+    ]
+ }
+ ```
+
 ***
 
 Now that we have a network created, let's create a DHCP range.  We can use the InfoBlox API for this task as well.
@@ -147,23 +146,6 @@ templates/new_lan_range.j2
   }
 ```
 
-Our json file will look like the following.
-
-```jinja2
-{
-     "start_addr": "10.0.12.100",
-     "end_addr": "10.0.12.254",
-     "server_association_type": "MEMBER" ,
-     "member": 
-        {
-           "_struct": "dhcpmember",
-           "ipv4addr" : "192.168.1.20"
-        }
-     
-  }
-```
-***
-
 Then add the following to your playbook.
 
 ```yaml
@@ -183,6 +165,23 @@ Then add the following to your playbook.
       status_code: 201
       validate_certs: false
 ```
+
+Our json file will look like the following.
+
+```jinja2
+{
+     "start_addr": "10.0.12.100",
+     "end_addr": "10.0.12.254",
+     "server_association_type": "MEMBER" ,
+     "member": 
+        {
+           "_struct": "dhcpmember",
+           "ipv4addr" : "192.168.1.20"
+        }
+     
+  }
+```
+
 ***
 
 Now that we have our new network created and have assigned a DHCP range, we can add in some details with the `nios_network` module. Here is where you can configure DHCP options and update your extensible attributes.  
@@ -222,7 +221,20 @@ We should tell InfoBlox to restart the DHCP service since there was a change.  T
         status_code: 200
         validate_certs: false
 ```
+
+Create the json file restart_dhcp_service.json 
+
+```jinja2
+$ vi restart_dhcp_service.json 
+
+{
+    "member_order" : "SIMULTANEOUSLY",
+    "service_option": "DHCP"
+}
+```
+
 ***
+
 
 Once the file is complete, you can push it to your source code repository.
 
