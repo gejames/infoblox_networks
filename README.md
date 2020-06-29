@@ -41,7 +41,7 @@ nios_provider:
 
 To start our playbook, we'll assign some default values for testing.  These can be overridden later in Tower with a Survey. 
 
-> Create a new file called `nios_add_ipv4_network.yml` 
+Create a new file called `nios_add_ipv4_network.yml` 
 
 ```yaml
 nios_add_ipv4_network.yml
@@ -60,6 +60,7 @@ nios_add_ipv4_network.yml
     state: CA
 ```
 ***
+
 The first thing we need to do is query InfoBlox for the next available subnet within our parent container.  Add the following lines to your playbook.  This will return the next available /24 (our cidr variable above) in the format 10.0.12.0/24 and assign it to the networkaddr variable.
 
 ```yaml
@@ -70,6 +71,7 @@ tasks:
         networkaddr: "{{ lookup('nios_next_network', parent_container, cidr=cidr, provider=nios_provider) }}"
 ```
 ***
+
 You can create the network with the `nios_network` module, but at this time the module does not support assigning the network to a grid member.  For that, we need to use the InfoBlox API and the Ansible uri module to make the change.
 
 We will use a jinja2 template to create the json file necessary for our change.
@@ -87,8 +89,6 @@ templates/net_network.j2
     ]
  }
 ```
-
-
 
 The output from our template will create a json file that will look like this
 
@@ -126,6 +126,7 @@ Add the following to your playbook to create the network.
       validate_certs: false
 ```
 ***
+
 Now that we have a network created, let's create a DHCP range.  We can use the InfoBlox API for this task as well.
 
 First, create the template file.
