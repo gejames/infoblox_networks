@@ -10,7 +10,7 @@ This tutorial is meant as an introduction to how one can manage IPs with Ansible
 
 ## Reqirements
 
-You should already be familiar with creating assests in Ansible Tower and have knowledge of how InfoBlox IPAM works.  
+You should already be familiar with creating assets in Ansible Tower and have know InfoBlox IPAM works.  
 
 First, install the infoblox-client on your Ansible Tower server. This will install the python libraries necessary for Ansible to communicate with InfoBlox.
 
@@ -221,7 +221,7 @@ In Ansible Tower we will create a Job Template and Survey so anyone can create a
 
 In Ansible Tower, create a new inventory with your InfoBlox server as the host and a group called nios.  Our playbook references that group, so the name should match our playbook host statement. 
 
-You will also need to create new Project that points to your source control.
+You will also need to create a new Project that points to your source control.
 
 
 Create a job template for your new playbook. If you encrypted your **nios.yml** file with ansible-vault, you will have to provide your Vault credentials here.
@@ -236,7 +236,7 @@ Add a survey so the user can choose where they need the new subnet created and c
 
 ***
 
-Before we launch or Job Template, let's take a look at InfoBlox and see what existing networks we have.
+Before we launch our Job Template, let's take a look at InfoBlox and see what existing networks we have.
 
 You can see that 10.0.12.0/24 is the next available network.  
 
@@ -263,7 +263,7 @@ In InfoBlox, examine the network and verify the changes have been made.
 
 ## Next Steps
 
-From here, you should be able to add additional tasks that create hosts records or update existing networks. Try to write a playbook that updates the extensible attributes of an existing network and tests to make sure it is an valid parent container.
+From here, you should be able to add additional tasks that can create host records or update existing networks. Try to write a playbook that updates the extensible attributes of an existing network and tests to make sure it is a valid parent container.
 
 
 
