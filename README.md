@@ -273,7 +273,7 @@ In InfoBlox, examine the network and verify the changes have been made.
 
 ## Next Steps
 
-From here, you should be able to add additional tasks that can create host records or update existing networks. Try to write a playbook that updates the extensible attributes of an existing network and tests to make sure it is a valid parent container.
+From here, you should be able to add additional tasks that can create host records or update existing networks. Try to write a playbook that updates the extensible attributes of an existing network.  Add tests to make sure the parent container is valid based on some criteria, such as state or region.
 
 
 
@@ -287,6 +287,8 @@ From here, you should be able to add additional tasks that can create host recor
 [Ansible InfoBlox Guide](https://docs.ansible.com/ansible/latest/scenario_guides/guide_infoblox.html)
 
 [Ansible NIOS Modules](https://docs.ansible.com/ansible/latest/modules/list_of_net_tools_modules.html#nios)
+
+[ipaddr jinja2 filter](https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters_ipaddr.html)
 
 
 
