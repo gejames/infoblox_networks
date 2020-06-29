@@ -178,7 +178,7 @@ Then add the following to your playbook.
       validate_certs: false
 ```
 ***
-Now that we have our new network created and have assigned a DHCP range, we can add in some details with then nios_network module. Here is where you can configure DHCP options and update your extensible attributes.  
+Now that we have our new network created and have assigned a DHCP range, we can add in some details with the nios_network module. Here is where you can configure DHCP options and update your extensible attributes.  
 
 ```yaml
 - name: UPDATE NEW NETWORK
@@ -263,7 +263,8 @@ In InfoBlox, examine the network and verify the changes have been made.
 
 ## Next Steps
 
-From here, you should be able to add additional tasks that create hosts records or update existing networks. Try to write a playbook that updates the extensible network of an existing network and tests to make sure it is an valid parent container.
+From here, you should be able to add additional tasks that create hosts records or update existing networks. Try to write a playbook that updates the extensible attributes of an existing network and tests to make sure it is an valid parent container.
+
 
 
 
