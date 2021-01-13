@@ -71,7 +71,9 @@
   
     - name: RESTART DHCP SERVICE
       uri:
-        url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/grid/b25lLmNsdXN0ZXIkMA:Infoblox?_function=restartservices
+        url: >
+             https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}
+             /grid/b25lLmNsdXN0ZXIkMA:Infoblox?_function=restartservices
         method: POST
         user: "{{ nios_provider.username }}" 
         password: "{{ nios_provider.password }}"
