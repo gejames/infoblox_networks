@@ -1,6 +1,7 @@
-- hosts: nios
+- name: Add ipv4 network to NIOS
+  hosts: nios
   connection: local
-
+  
   vars:
     cidr: 24
     parent_container: 10.0.0.0/16
@@ -66,9 +67,8 @@
         state: present
         provider: "{{ nios_provider }}"
       loop: "{{ networkaddr }}"
-
-#  
-
+      notify: RESTART DHCP SERVICE
+  
     - name: RESTART DHCP SERVICE
       uri:
         url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/grid/b25lLmNsdXN0ZXIkMA:Infoblox?_function=restartservices
@@ -82,48 +82,6 @@
 
 
 
-#    - name: configure an IPv4 host record
-#      nios_host_record:
-#        name: leaf03.ansible.com
-#        ipv4:
-#          - address: "10.0.0.2"
-          
-          #
-          # "{{ lookup('nios_next_ip', '10.0.0.0/24', num=1, exclude=['10.0.0.1'], provider=nios_provider)[0] }}"
-#        state: present
-#        provider: "{{ nios_provider }}"
-   #
-   #  SAMPLE CODE
-   #
-#    - name: return the next 3 available IP addresses
-#      set_fact:
-#        ipaddr: "{{ lookup('nios_next_ip', '10.0.0.0/24', num=1,  exclude=['10.0.0.1'], provider=nios_provider) }}"
-
-
-
-
-    # - name: ENSURE NETWORK CONTAINER IS PRESENT
-    #   nios_network:
-    #     container: true
-    #     network: 10.0.0.0/16
-    #     comment: sets the IPv4 network
-    #     options:
-    #       - name: domain-name
-    #         value: ansible.com
-    #     state: present
-    #     provider: "{{nios_provider}}"
-
-{
-     "start_addr": "{{ networkaddr[0] | ipaddr(start_dhcp_range) | ipaddr('address') }}",
-     "end_addr": "{{ networkaddr[0] | ipaddr(end_dhcp_range) | ipaddr('address') }}",
-     "server_association_type": "MEMBER" ,
-     "member": 
-        {
-           "_struct": "dhcpmember",
-           "ipv4addr" : "{{ nios_provider.host }}"
-        }
-     
-  }
 
     
 

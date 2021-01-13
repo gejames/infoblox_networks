@@ -1,13 +1,3 @@
-#  Automating IPAM with Ansible and InfoBlox
-
-One of the more error-prone and mundane tasks a system administrator is tasked with is IP Administration. Care needs to be taken that IP addresses are assigned accurately and promptly. As complexity grows, it becomes increasingly difficult for administrators to keep track of IP changes by hand.  This inevitably leads to a centralized tool, such as InfoBlox, being used to track IP assignments.  While this alleviates some of the complexity, there is still room for human error.  IP addresses might not be retired properly.  Inexperienced admins may assign IPs from an incorrect subnet.  A device can be moved without letting network administrators know about the change. As the source of truth drifts from reality, the chance of an outage or other system failure increases. 
-
-The complexities of a particular environment take time to learn as well.  Does the new branch office in Boise get an IP subnet from the mid-west region, or is it part of the Pacific Northwest?   What IP should be assigned to the new firewall in the Seattle Datacenter?  How many exceptions to the rules do we allow before no one can understand the system as a whole?
-
-With Ansible and InfoBlox, we can automate these decisions and take some of the guesswork out the process.  We can use Ansible Tower to create Surveys that will allow anyone with a passing knowledge of IP addresses to request, assign, and manage the IPs they need to complete their work.  This frees up time for system admins to work on bigger projects and reduces the chance of human error.  
-
-This tutorial is meant as an introduction to how one can manage IPs with Ansible and InfoBlox, and thus overcome some of the problems inherent in manual IP assignment.  You should have access to InfoBlox and Ansible Tower, preferably in a lab environment.   We will walk through setting up the Ansible control host to connect to InfoBlox, creating credentials, and assigning a new subnet from a pre-defined pool of available IPs.   We will also create a DHCP range and show how you can assign extensible attributes automatically.  We will create a Survey in Ansible Tower that will anyone to create a new IP network in InfoBlox.
-
 ## Reqirements
 
 You should already be familiar with creating assets in Ansible Tower and know how InfoBlox IPAM works.  
