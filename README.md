@@ -1,16 +1,16 @@
 ## Reqirements
 
-You should already be familiar with creating assets in Ansible Tower and know how InfoBlox IPAM works.  
+You should already be familiar with creating assets in Ansible Tower and know how Infoblox IPAM works.  
 
-First, install the infoblox-client on your Ansible Tower server. This will install the python libraries necessary for Ansible to communicate with InfoBlox.
+First, install the Infoblox-client on your Ansible Tower server. This will install the python libraries necessary for Ansible to communicate with Infoblox.
 
 ```bash
-$ sudo pip install infoblox-client
+$ sudo pip install Infoblox-client
 ```
 
-Next, we need to create credentials so Ansible Tower can connect to InfoBlox.  For simplicity, I have put my credentials in a `group_vars/nios.yml` file.  
+Next, we need to create credentials so Ansible Tower can connect to Infoblox.  For simplicity, I have put my credentials in a `~/secrests/nios.yml` file.  
 
-I would also recommend encrypting this file with ansible-vault.  In a production environment, you will probably want to create a custom credential for InfoBlox within Ansible Tower.
+In a production environment, you will probably want to create a custom credential for Infoblox within Ansible Tower.
 
 We will create a few files for this lab, so I will use the standard of putting the file name to be created before the code as follows:
 
@@ -19,13 +19,13 @@ Do not put the file name in the file.
 
 
 ```yaml
-group_vars/nios.yml
+~/secrets/nios.yml
 
 ---
 nios_provider:
   host: 192.168.1.20
   username: admin
-  password: infoblox
+  password: Infoblox
 ```
 ## Adding an ipv4 network
 
@@ -51,7 +51,7 @@ nios_add_ipv4_network.yml
 ```
 ***
 
-The first thing we need to do is query InfoBlox for the next available subnet within our parent container.  Add the following lines to your playbook.  This will return the next available /24 (our cidr variable above) in the format 10.0.12.0/24 and assign it to the networkaddr variable.
+The first thing we need to do is query Infoblox for the next available subnet within our parent container.  Add the following lines to your playbook.  This will return the next available /24 (our cidr variable above) in the format 10.0.12.0/24 and assign it to the networkaddr variable.
 
 ```yaml
 tasks:
@@ -62,7 +62,7 @@ tasks:
 ```
 ***
 
-You can create the network with the `nios_network` module, but at this time the module does not support assigning the network to a grid member.  For that, we need to use the InfoBlox API and the Ansible uri module to make the change.
+You can create the network with the `nios_network` module, but at this time the module does not support assigning the network to a grid member.  For that, we need to use the Infoblox API and the Ansible uri module to make the change.
 
 We will use a jinja2 template to create the json file necessary for our change.
 
@@ -116,7 +116,7 @@ The output from our template will create a json file that will look like this
 
 ***
 
-Now that we have a network created, let's create a DHCP range.  We can use the InfoBlox API for this task as well.
+Now that we have a network created, let's create a DHCP range.  We can use the Infoblox API for this task as well.
 
 First, create the template file.
 
@@ -196,7 +196,7 @@ Now that we have our new network created and have assigned a DHCP range, we can 
 ```
 ***
 
-We should tell InfoBlox to restart the DHCP service since there was a change.  The section `grid/b25lLmNsdXN0ZXIkMA` may differ for your installation.  Please refer to the InfoBlox documentation on how to determine this value.
+We should tell Infoblox to restart the DHCP service since there was a change.  The section `grid/b25lLmNsdXN0ZXIkMA` may differ for your installation.  Please refer to the Infoblox documentation on how to determine this value.
 
 
 ```yaml
@@ -226,11 +226,12 @@ $ vi restart_dhcp_service.json
 ***
 
 
+
 Once the file is complete, you can push it to your source code repository.
 
-In Ansible Tower, we will create a Job Template and Survey so anyone can create a new network in InfoBlox.
+In Ansible Tower, we will create a Job Template and Survey so anyone can create a new network in Infoblox.
 
-In Ansible Tower, create a new inventory with your InfoBlox server as the host and a group called nios.  Our playbook references that group, so the name should match our playbook host statement. 
+In Ansible Tower, create a new inventory with your Infoblox server as the host and a group called nios.  Our playbook references that group, so the name should match our playbook host statement. 
 
 You will also need to create a new Project that points to your source control.
 
@@ -247,11 +248,11 @@ Add a survey so the user can choose where they need the new subnet created and c
 
 ***
 
-Before we launch our Job Template, let's take a look at InfoBlox and see what existing networks we have.
+Before we launch our Job Template, let's take a look at Infoblox and see what existing networks we have.
 
 You can see that 10.0.12.0/24 is the next available network.  
 
-![InfoBlox](docs/infoblox1.png)
+![Infoblox](docs/Infoblox1.png)
 
 ***
 
@@ -267,9 +268,9 @@ You can see the next available network in the output
 
 ***
 
-In InfoBlox, examine the network and verify the changes have been made.
+In Infoblox, examine the network and verify the changes have been made.
 
-![InfoBlox](docs/infoblox3.png)
+![Infoblox](docs/Infoblox3.png)
 
 ***
 
@@ -277,18 +278,18 @@ In InfoBlox, examine the network and verify the changes have been made.
 
 From here, you should be able to add additional tasks that can create host records or update existing networks. Add tests to make sure the parent container is valid based on some criteria, such as state or region. Try to write a playbook that updates the extensible attributes of an existing network.  
 
-Any automation journey should start with small wins.  With the help of Ansible and InfoBlox, you can automate a few small tasks today, and tomorrow you will have a fully automated IPAM solution.
+Any automation journey should start with small wins.  With the help of Ansible and Infoblox, you can automate a few small tasks today, and tomorrow you will have a fully automated IPAM solution.
 
 
 
 
 ## References
 
-[Github Repo ](https://github.com/gejames/infoblox_networks)
+[Github Repo ](https://github.com/gejames/Infoblox_networks)
 
-[InfoBlox API Documentaion](https://www.infoblox.com/wp-content/uploads/infoblox-deployment-infoblox-rest-api.pdf)
+[Infoblox API Documentaion](https://www.Infoblox.com/wp-content/uploads/Infoblox-deployment-Infoblox-rest-api.pdf)
 
-[Ansible InfoBlox Guide](https://docs.ansible.com/ansible/latest/scenario_guides/guide_infoblox.html)
+[Ansible Infoblox Guide](https://docs.ansible.com/ansible/latest/scenario_guides/guide_Infoblox.html)
 
 [Ansible NIOS Modules](https://docs.ansible.com/ansible/latest/modules/list_of_net_tools_modules.html#nios)
 
