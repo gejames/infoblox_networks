@@ -2,6 +2,7 @@
 - name: Add ipv4 network to NIOS
   hosts: nios
   #connection: local
+  gather_facts: false
  
   collections:
     - infoblox.nios_modules
@@ -26,7 +27,7 @@
     - name: CREATE JSON FILE FOR NEW NETWORK
       template:
         src: templates/new_network.j2
-        dest: new_network.json
+        dest: /tmp/new_network.json
       delegate_to: localhost
  
 
@@ -36,7 +37,7 @@
         method: POST
         user: "{{ nios_provider.username }}" 
         password: "{{ nios_provider.password }}"
-        body: "{{ lookup('file','new_network.json') }}"
+        body: "{{ lookup('file','/tmp/new_network.json') }}"
         body_format: json
         status_code: 201
         validate_certs: false
@@ -44,7 +45,7 @@
     - name: CREATE JSON FILE FOR NEW DCHP RANGE
       template:
         src: templates/new_lan_range.j2
-        dest: new_lan_range.json
+        dest: /tmp/new_lan_range.json
 
     - name: CREATE DHCP RANGE FOR NEW NETWORK
       uri:
@@ -52,7 +53,7 @@
         method: POST
         user: "{{ nios_provider.username }}" 
         password: "{{ nios_provider.password }}"
-        body: "{{ lookup('file','new_lan_range.json') }}"
+        body: "{{ lookup('file','/tmp/new_lan_range.json') }}"
         body_format: json
         status_code: 201
         validate_certs: false
