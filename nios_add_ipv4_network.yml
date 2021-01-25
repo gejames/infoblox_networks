@@ -87,6 +87,7 @@
         body_format: json
         status_code: 200
         validate_certs: false
+      delegate_to: localhost  
 
 
 
