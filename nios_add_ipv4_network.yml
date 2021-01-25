@@ -1,3 +1,4 @@
+---
 - name: Add ipv4 network to NIOS
   hosts: nios
   connection: local
@@ -23,7 +24,9 @@
       template:
         src: templates/new_network.j2
         dest: new_network.json
-      
+      delegate_to: localhost
+ 
+
     - name: CREATE NETWORK OBJECT AND ASSIGN GRID MEMBER
       uri:
         url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/network
@@ -67,13 +70,11 @@
         state: present
         provider: "{{ nios_provider }}"
       loop: "{{ networkaddr }}"
-      notify: RESTART DHCP SERVICE
   
     - name: RESTART DHCP SERVICE
       uri:
         url: >
-             https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}
-             /grid/b25lLmNsdXN0ZXIkMA:Infoblox?_function=restartservices
+             https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/grid/b25lLmNsdXN0ZXIkMA:Infoblox?_function=restartservices
         method: POST
         user: "{{ nios_provider.username }}" 
         password: "{{ nios_provider.password }}"
