@@ -37,7 +37,7 @@
         method: POST
         user: "{{ nios_provider.username }}" 
         password: "{{ nios_provider.password }}"
-        body: "{{ lookup('file','/tmp/new_network.json') }}"
+        body: "{{ lookup('file','new_network.json') }}"
         body_format: json
         status_code: 201
         validate_certs: false
@@ -54,7 +54,7 @@
         method: POST
         user: "{{ nios_provider.username }}" 
         password: "{{ nios_provider.password }}"
-        body: "{{ lookup('file','/tmp/new_lan_range.json') }}"
+        body: "{{ lookup('file','new_lan_range.json') }}"
         body_format: json
         status_code: 201
         validate_certs: false
