@@ -28,7 +28,6 @@
       template:
         src: templates/new_network.j2
         dest: /tmp/new_network.json
-      delegate_to: localhost
  
 
     - name: CREATE NETWORK OBJECT AND ASSIGN GRID MEMBER
