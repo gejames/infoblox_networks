@@ -1,7 +1,7 @@
 ---
 - name: Add ipv4 network to NIOS
   hosts: nios
-  connection: local
+  #connection: local
  
   collections:
     - infoblox.nios_modules
