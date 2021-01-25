@@ -9,7 +9,7 @@ $ sudo pip install Infoblox-client
 ```
 
 Next, we need to create credentials so Ansible Tower can connect to Infoblox.  For simplicity, I have put my credentials in a `~/secrests/nios.yml` file.  
-
+This file will be used during testing, but isn't necessary when using Ansible TOwer.
 In a production environment, you will probably want to create a custom credential for Infoblox within Ansible Tower.
 
 We will create a few files for this lab, so I will use the standard of putting the file name to be created before the code as follows:
@@ -227,7 +227,11 @@ $ vi restart_dhcp_service.json
 
 
 
-Once the file is complete, you can push it to your source code repository.
+Once the file is complete, you can push it to your source code repository and start testing.  If you want to run the playbook from the command line:
+
+```bash
+$ ansible-playbook nios_add_ipv4_network.yml -e @~/secrets/nios.yml
+```
 
 In Ansible Tower, we will create a Job Template and Survey so anyone can create a new network in Infoblox.
 
