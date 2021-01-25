@@ -27,7 +27,8 @@
     - name: CREATE JSON FILE FOR NEW NETWORK
       template:
         src: templates/new_network.j2
-        dest: /tmp/new_network.json
+        dest: new_network.json
+      delegate_to: localhost
  
 
     - name: CREATE NETWORK OBJECT AND ASSIGN GRID MEMBER
@@ -44,7 +45,8 @@
     - name: CREATE JSON FILE FOR NEW DCHP RANGE
       template:
         src: templates/new_lan_range.j2
-        dest: /tmp/new_lan_range.json
+        dest: new_lan_range.json
+      delegate_to: localhost
 
     - name: CREATE DHCP RANGE FOR NEW NETWORK
       uri:
