@@ -240,7 +240,7 @@ In Ansible Tower, we will create a Job Template and Survey so anyone can create 
 You will also need to create a new Project that points to your source control. For the inventory, we can the Demo Inventory that includes localhost.
 
 
-Create a job template for your new playbook. For a lab environment, you include the contents of the nios.yml file in the extra variables section.
+Create a job template for your new playbook. For a lab environment, include the contents of the nios.yml file in the extra variables section.
 
 ![JobTemplate](docs/jobtemplate1.png)
 
@@ -252,7 +252,7 @@ Add a survey so the user can choose where they need the new subnet created and c
 
 ***
 
-Before we launch our Job Template, let's take a look at Infoblox and see what existing networks we have.
+Before we launch our Job Template, let's take a look at Infoblox NIOS and see what existing networks we have.
 
 You can see that 10.0.12.0/24 is the next available network.  
 
