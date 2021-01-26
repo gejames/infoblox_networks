@@ -37,7 +37,8 @@ Create a new file called `nios_add_ipv4_network.yml`
 nios_add_ipv4_network.yml
 
 ---
-- hosts: nios
+- name: add ipv4 network to nios
+  hosts: localhost
   connection: local
 
   vars:
@@ -235,12 +236,11 @@ $ ansible-playbook nios_add_ipv4_network.yml -e @~/secrets/nios.yml
 
 In Ansible Tower, we will create a Job Template and Survey so anyone can create a new network in Infoblox.
 
-In Ansible Tower, create a new inventory with your Infoblox server as the host and a group called nios.  Our playbook references that group, so the name should match our playbook host statement. 
 
-You will also need to create a new Project that points to your source control.
+You will also need to create a new Project that points to your source control. For the inventory, we can the Demo Inventory that includes localhost.
 
 
-Create a job template for your new playbook. If you encrypted your `nios.yml` file with ansible-vault, you will have to provide your Vault credentials here.
+Create a job template for your new playbook. For a lab environment, you include the contents of the nios.yml file in the extra variables section.
 
 ![JobTemplate](docs/jobtemplate1.png)
 
