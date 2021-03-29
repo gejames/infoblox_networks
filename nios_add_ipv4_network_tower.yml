@@ -1,6 +1,7 @@
 ---
 - name: Add ipv4 network to NIOS
   hosts: localhost
+  connection: local
   gather_facts: false
 
   collections:
