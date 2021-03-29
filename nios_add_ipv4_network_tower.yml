@@ -16,23 +16,19 @@
     country: USA
     state: CA
     wapi_version: 2.11.1
-
-  
-  tasks:
-
-    - name: create nios_provider
-      set_fact:
-        nios_provider:
+    nios_provider:
           host: "{{ nios_host }}"
           username: "{{ nios_username }}"
           password: "{{ nios_password }}"
           wapi_version: "{{ wapi_version }}"
-        
+
+  
+  tasks:
+
     - name: RETURN NEXT AVAILABLE NETWORK
       set_fact:
         networkaddr: "{{ lookup('nios_next_network', parent_container, cidr=cidr, provider=nios_provider) }}"
-     
-         
+              
     - name: CREATE JSON FILE FOR NEW NETWORK
       template:
         src: templates/new_network.j2
