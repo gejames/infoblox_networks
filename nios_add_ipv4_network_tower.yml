@@ -18,6 +18,13 @@
 
   
   tasks:
+
+    - name: create nios_provider
+      set_fact:
+        nios_provider:
+          host: "{{ nios_host }}"
+          username: "{{ nios_username }}"
+          password: "{{ nios_password }}"
         
     - name: RETURN NEXT AVAILABLE NETWORK
       set_fact:
