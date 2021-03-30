@@ -9,8 +9,7 @@
 
   vars:
     cidr: 24
-    parent_container: 10.0.0.0/16
-    start_dhcp_range: 129
+    parent_container: 10.0.0.0/8
     end_dhcp_range: 254
     region: North America
     country: USA
