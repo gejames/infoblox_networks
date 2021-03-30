@@ -17,9 +17,9 @@
     state: CA
     wapi_version: 2.11.1
     nios_provider:
-          host: "{{ nios_host }}"
-          username: "{{ nios_username }}"
-          password: "{{ nios_password }}"
+          host: "{{ nios_grid_url }}"
+          username: "{{ nios_grid_username }}"
+          password: "{{ nios_grid_password }}"
           wapi_version: "{{ wapi_version }}"
 
   tasks:
