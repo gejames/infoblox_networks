@@ -8,8 +8,9 @@
     - infoblox.nios_modules
 
   vars:
-    cidr: 24
     parent_container: 10.0.0.0/8
+    cidr: 24
+    start_dhcp_range: 129
     end_dhcp_range: 254
     region: North America
     country: USA
