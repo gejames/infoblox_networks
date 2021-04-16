@@ -20,13 +20,12 @@
           host: "{{ nios_grid_url }}"
           username: "{{ nios_grid_username }}"
           password: "{{ nios_grid_password }}"
-          wapi_version: "{{ wapi_version }}"
-
+    
   tasks:
 
     - name: RETURN NEXT AVAILABLE NETWORK
       set_fact:
-        networkaddr: "{{ lookup('nios_next_network', parent_container, cidr=cidr, provider=nios_provider) }}"
+        networkaddr: "{{ lookup('infoblox.nios_modules.nios_next_network', parent_container, cidr=cidr, provider=nios_provider) }}"
 
     - name: CREATE JSON FILE FOR NEW NETWORK
       template:
@@ -35,7 +34,7 @@
 
     - name: CREATE NETWORK OBJECT AND ASSIGN GRID MEMBER
       uri:
-        url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/network
+        url: https://{{ nios_provider.host }}/wapi/v{{ wapi_version }}/network
         method: POST
         user: "{{ nios_provider.username }}"
         password: "{{ nios_provider.password }}"
@@ -51,7 +50,7 @@
 
     - name: CREATE DHCP RANGE FOR NEW NETWORK
       uri:
-        url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/range
+        url: https://{{ nios_provider.host }}/wapi/v{{ wapi_version }}/range
         method: POST
         user: "{{ nios_provider.username }}"
         password: "{{ nios_provider.password }}"
@@ -61,7 +60,7 @@
         validate_certs: false
 
     - name: UPDATE NEW NETWORK
-      nios_network:
+      infoblox.nios_modules.nios_network:
         network: "{{ item }}"
         comment: Added from Ansible
         extattrs:
@@ -80,7 +79,7 @@
     - name: RESTART DHCP SERVICE
       uri:
         url: >
-             https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/grid/b25lLmNsdXN0ZXIkMA:Infoblox?_function=restartservices
+             https://{{ nios_provider.host }}/wapi/v{{ wapi_version }}/grid/b25lLmNsdXN0ZXIkMA:Infoblox?_function=restartservices
         method: POST
         user: "{{ nios_provider.username }}"
         password: "{{ nios_provider.password }}"
