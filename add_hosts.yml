@@ -1,0 +1,54 @@
+---
+
+## Add hosts to infoblox for testing with dynamic tower inventory ## 
+
+
+- name: Add ipv4 network to NIOS
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  collections:
+    - infoblox.nios_modules
+
+  vars:
+    wapi_version: 2.11.1
+    nios_grid_ip: 192.168.2.54
+    nios_provider:
+          host: "{{ nios_grid_url }}"
+          username: "{{ nios_grid_username }}"
+          password: "{{ nios_grid_password }}"
+          wapi_version: "{{ wapi_version }}"
+
+
+  tasks:
+
+    - name: RETURN NEXT AVAILABLE NETWORK
+      set_fact:
+        networkaddr: "{{ lookup('nios_next_network', parent_container, cidr=cidr, provider=nios_provider) }}"
+
+    - name: CREATE JSON FILE FOR NEW NETWORK
+      template:
+        src: templates/new_network.j2
+        dest: new_network.json
+
+    - name: CREATE NETWORK OBJECT AND ASSIGN GRID MEMBER
+      uri:
+        url: https://{{ nios_provider.host }}/wapi/v{{ nios_provider.wapi_version }}/network
+        method: POST
+        user: "{{ nios_provider.username }}"
+        password: "{{ nios_provider.password }}"
+        body: "{{ lookup('file','new_network.json') }}"
+        body_format: json
+        status_code: 201
+        validate_certs: false
+
+    - name: Configure ipv4 host records 
+      infoblox.nios_modules.nios_host_record:
+        name: "host-{{ networkaddr[0] | ipaddr(item) | ipaddr('address') | regex_replace('\\.','-') }}"
+        ipv4:
+          - address: "{{ networkaddr[0] | ipaddr(item) | ipaddr('address') }}"
+        state: present
+        configure_for_dns: false
+        provider: "{{ nios_provider }}"
+      with_sequence: start=5 end=10
