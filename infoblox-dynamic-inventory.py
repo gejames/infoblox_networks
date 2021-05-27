@@ -33,9 +33,8 @@ except ImportError as exc:
 
 CONFIG_FILES = [
     os.environ.get('INFOBLOX_CONFIG_FILE', ''),
-    '/etc/ansible/infoblox.yaml',
-    '/etc/ansible/infoblox.yml'
-]
+    './infoblox.yaml',
+    ]
 
 
 def parse_args():
